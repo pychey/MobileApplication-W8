@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'ui/screens/welcome_screen.dart';
+import '../../../assets/images/screens/welcome_screen.dart';
  
 class TemperatureApp extends StatefulWidget {
   const TemperatureApp({super.key});
