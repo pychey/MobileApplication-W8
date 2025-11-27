@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'ui/screens/welcome_screen.dart';
+import 'ui/screens/temperature_screen.dart';
 
-import '../../../assets/images/screens/welcome_screen.dart';
- 
 class TemperatureApp extends StatefulWidget {
   const TemperatureApp({super.key});
 
@@ -12,6 +12,14 @@ class TemperatureApp extends StatefulWidget {
 }
 
 class _TemperatureAppState extends State<TemperatureApp> {
+  bool isWelcomeScreen = true;
+  StatelessWidget get currentScreen => isWelcomeScreen ? WelcomeScreen(callback: onChangeScreen) : TemperatureScreen(callback: onChangeScreen);
+
+  void onChangeScreen() {
+    setState(() {
+      isWelcomeScreen = !isWelcomeScreen;
+    });
+  }
   
   @override
   Widget build(context) {
@@ -29,7 +37,7 @@ class _TemperatureAppState extends State<TemperatureApp> {
               end: Alignment.bottomRight,
             ),
           ),
-          child: const WelcomeScreen(),
+          child: currentScreen,
         ),
       ),
     );
