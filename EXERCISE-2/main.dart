@@ -13,7 +13,7 @@ class TemperatureApp extends StatefulWidget {
 
 class _TemperatureAppState extends State<TemperatureApp> {
   bool isWelcomeScreen = true;
-  StatelessWidget get currentScreen => isWelcomeScreen ? WelcomeScreen(callback: onChangeScreen) : TemperatureScreen(callback: onChangeScreen);
+  Widget get currentScreen => isWelcomeScreen ? WelcomeScreen(callback: onChangeScreen) : TemperatureScreen(callback: onChangeScreen);
 
   void onChangeScreen() {
     setState(() {

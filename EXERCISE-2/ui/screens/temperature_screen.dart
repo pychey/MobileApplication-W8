@@ -1,17 +1,35 @@
 import 'package:flutter/material.dart';
 
-class TemperatureScreen extends StatelessWidget {
+class TemperatureScreen extends StatefulWidget {
   final VoidCallback callback;
-  TemperatureScreen({super.key, required this.callback});
+  
+  const TemperatureScreen({super.key, required this.callback});
+
+  @override
+  State<TemperatureScreen> createState() => _TemperatureScreenState();
+}
+
+class _TemperatureScreenState extends State<TemperatureScreen> {
+  final textController = TextEditingController();
+  String inputText = '';
+  int? get degree => int.tryParse(inputText);
+  double? get fahrenheit => degree == null ? null : (degree! * 9 / 5) + 32;
+  String get fahrenheitText => fahrenheit == null ? '' : fahrenheit.toString();
 
   final InputDecoration inputDecoration = InputDecoration(
     enabledBorder: OutlineInputBorder(
       borderSide: const BorderSide(color: Colors.white, width: 1.0),
       borderRadius: BorderRadius.circular(12),
     ),
-    hintText: 'Enter a temperature',
+    hintText: 'Enter Degree Temperature in Interger',
     hintStyle: const TextStyle(color: Colors.white),
   );
+
+  @override
+  void dispose() {
+    textController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +43,7 @@ class TemperatureScreen extends StatelessWidget {
             Stack(
               children: [
                 IconButton(
-                  onPressed: callback, 
+                  onPressed: widget.callback, 
                   icon: const Icon(
                     Icons.arrow_back,
                     size: 30,
@@ -51,8 +69,12 @@ class TemperatureScreen extends StatelessWidget {
             const Text("Temperature in Degrees:"),
             const SizedBox(height: 10),
             TextField(
+              controller: textController,
               decoration: inputDecoration,
               style: const TextStyle(color: Colors.white),
+              onChanged: (value) => setState(() {
+                inputText = value;
+              }),
             ),
             const SizedBox(height: 30),
             const Text("Temperature in Fahrenheit:"),
@@ -63,7 +85,7 @@ class TemperatureScreen extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Text('test'),
+              child: Text(fahrenheitText),
             ),
           ],
         ),
