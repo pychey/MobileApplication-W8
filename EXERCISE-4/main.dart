@@ -1,72 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/W9-Flutter-Lab/EXERCISE-4/data/joke.data.dart';
+import 'package:myapp/W9-Flutter-Lab/EXERCISE-4/model/joke.dart';
+import 'package:myapp/W9-Flutter-Lab/EXERCISE-4/ui/joke.ui.dart';
 
 Color appColor = Colors.green[300] as Color;
 
 void main() => runApp(MaterialApp(
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: appColor,
-          title: const Text("Favorite Jokes"),
-        ),
-        body: const Column(
-          children: [FavoriteCard(), FavoriteCard(), FavoriteCard()],
-        ),
-      ),
-    ));
+  home: JokeApp(jokes: jokes),
+));
 
-class FavoriteCard extends StatefulWidget {
-  const FavoriteCard({
+class JokeApp extends StatefulWidget {
+  final List<Joke> jokes;
+
+  const JokeApp({
     super.key,
+    required this.jokes
   });
 
   @override
-  State<FavoriteCard> createState() => _FavoriteCardState();
+  State<JokeApp> createState() => _JokeAppState();
 }
 
-class _FavoriteCardState extends State<FavoriteCard> {
-  bool _isFavorite = false;
+class _JokeAppState extends State<JokeApp> {
+  String? currentFavJokeId;
 
-  void onFavoriteClick() {
+  void saveAsFavorite(String jokeId) {
     setState(() {
-      _isFavorite = !_isFavorite;
+      currentFavJokeId = currentFavJokeId == null ? jokeId : currentFavJokeId == jokeId ? null : jokeId;
     });
   }
- 
+
+  List<JokeCard> getJokeCards() {
+    return widget.jokes.map((joke) => JokeCard(
+      id: joke.id, 
+      title: joke.title, 
+      description: joke.description, 
+      callback: saveAsFavorite, 
+      isFavorite: currentFavJokeId == joke.id,
+    )).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(width: .5, color: Colors.grey),
-        ),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: appColor,
+        title: const Text("Favorite Jokes"),
       ),
-      padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-           Expanded(
-            flex: 7,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'title',
-                  style: TextStyle(
-                      color: appColor, fontWeight: FontWeight.w800),
-                ),
-                const SizedBox(height: 10.0),
-                const Text('description')
-              ],
-            ),
-          ),
-          IconButton(
-              onPressed: onFavoriteClick,
-              icon: Icon(
-                _isFavorite ? Icons.favorite : Icons.favorite_border,
-                color: _isFavorite ? Colors.red : Colors.grey,
-              ))
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            ...getJokeCards()
+          ],
+        ),
       ),
     );
   }
