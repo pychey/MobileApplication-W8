@@ -26,7 +26,7 @@ class _JokeAppState extends State<JokeApp> {
 
   void saveAsFavorite(String jokeId) {
     setState(() {
-      currentFavJokeId = currentFavJokeId == null ? jokeId : currentFavJokeId == jokeId ? null : jokeId;
+      currentFavJokeId = currentFavJokeId == jokeId ? null : jokeId;
     });
   }
 
